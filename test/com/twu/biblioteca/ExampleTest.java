@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 public class ExampleTest {
 
     @Test
-    public void test() {
+    public void testMenuOptions() {
         assertEquals(1, 1);
     }
 }
