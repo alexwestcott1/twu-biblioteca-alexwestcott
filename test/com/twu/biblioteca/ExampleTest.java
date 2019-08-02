@@ -8,6 +8,10 @@ public class ExampleTest {
 
     @Test
     public void testMenuOptions() {
-        assertEquals(1, 1);
+
+        Library library = new Library();
+
+
+
     }
 }

@@ -26,6 +26,7 @@ public class Library {
             System.out.println("Choose an option by entering the corresponding number:");
             System.out.println("0: List of books");
             System.out.println("1: Check out a book");
+            System.out.println("2: Check in a book");
             System.out.println("-1: Quit application");
 
             //Program reads input from user, if it is valid, display the corresponding option
@@ -35,8 +36,12 @@ public class Library {
 
             if (optionSelected.equals("0")) {
 
-                System.out.println("Available titles: ");
-                displayBooks(checkedInBooks);
+                if(checkedInBooks.size() > 0) {
+                    System.out.println("Available titles: ");
+                    displayBooks(checkedInBooks);
+                } else {
+                    System.out.println("No books available!");
+                }
 
             } else if (optionSelected.equals("-1")) {
 
@@ -44,30 +49,58 @@ public class Library {
                 System.exit(0);
 
             } else if (optionSelected.equals("1")) {
-                System.out.println("Please choose a book to check out by entering the corresponding number:");
-                displayBooks(checkedInBooks);
-                System.out.println("-1: Quit to main menu");
+                if(checkedInBooks.size() > 0) {
+                    System.out.println("Please choose a book to check out by entering the corresponding number:");
+                    displayBooks(checkedInBooks);
 
-                int chosenBook = -1;
+                    int chosenBook = -1;
 
-                try {
-                    chosenBook = sc.nextInt();
+                    try {
+                        chosenBook = sc.nextInt();
 
-                    if(chosenBook < checkedInBooks.size() && chosenBook >= 0) {
-                        if (!checkedInBooks.get(chosenBook).isCheckedOut()) {
-                            checkOutBook(checkedInBooks, checkedOutBooks, checkedInBooks.get(chosenBook));
+                        if (chosenBook < checkedInBooks.size() && chosenBook >= 0) {
+                            if (!checkedInBooks.get(chosenBook).isCheckedOut()) {
+                                checkInOutBook(checkedInBooks, checkedOutBooks, checkedInBooks.get(chosenBook), false);
+                            } else {
+                                System.out.println("Sorry, that book is not available");
+                            }
                         } else {
-                            System.out.println("Sorry, that book is not available");
+                            System.out.println("Please select a valid option!");
                         }
-                    } else if(chosenBook == -1){
-                        System.out.println("Returning to main menu");
-                    } else {
-                        System.out.println("Please select a valid option!");
+                    } catch (InputMismatchException e) {
+                        System.out.println("Error: incorrect input type entered");
                     }
-                } catch(InputMismatchException e){
-                    System.out.println("Error: incorrect input type entered");
+                } else {
+                    System.out.println("No books available!");
                 }
 
+
+            } else if(optionSelected.equals("2")){
+
+                if(checkedOutBooks.size() > 0) {
+                    System.out.println("Please choose a book to check in by entering the corresponding number:");
+                    displayBooks(checkedOutBooks);
+
+                    int chosenBook = -1;
+
+                    try {
+                        chosenBook = sc.nextInt();
+
+                        if (chosenBook < checkedOutBooks.size() && chosenBook >= 0) {
+                            if (checkedOutBooks.get(chosenBook).isCheckedOut()) {
+                                checkInOutBook(checkedInBooks, checkedOutBooks, checkedOutBooks.get(chosenBook), true);
+                            } else {
+                                System.out.println("Sorry, that book is not available");
+                            }
+                        } else {
+                            System.out.println("Please select a valid option!");
+                        }
+                    } catch (InputMismatchException e) {
+                        System.out.println("Error: incorrect input type entered");
+                    }
+                } else {
+                    System.out.println("No books available!");
+                }
 
             } else {
 
@@ -86,23 +119,29 @@ public class Library {
         int count = 0;
 
         for (Book book : bookList) {
-            if(!book.isCheckedOut()) {
-                System.out.println(count + ": " + book.getBookTitle() + "\t|\tBy " + book.getBookAuthor() + "\t|\tPublished in " + book.getYearPublished());
-                count++;
-            }
+            System.out.println(count + ": " + book.getBookTitle() + "\t|\tBy " + book.getBookAuthor() + "\t|\tPublished in " + book.getYearPublished());
+            count++;
         }
 
     }
 
-    private void checkOutBook(ArrayList<Book> checkedIn, ArrayList<Book> checkedOut, Book book){
+    private void checkInOutBook(ArrayList<Book> checkedIn, ArrayList<Book> checkedOut, Book book, boolean checkIn){
 
-        checkedIn.remove(book);
-        checkedOut.add(book);
-        book.setCheckedOut(true);
-        System.out.println("Successfully checked out book: " + book.getBookTitle());
+        if(checkIn) {
+            checkedOut.remove(book);
+            checkedIn.add(book);
+            System.out.println("Thank you for returning the book: " + book.getBookTitle());
+        } else {
+            checkedIn.remove(book);
+            checkedOut.add(book);
+            System.out.println("Successfully checked out book: " + book.getBookTitle());
+        }
+
+        book.setCheckedOut(!checkIn);
 
 
     }
+
 
 
 
