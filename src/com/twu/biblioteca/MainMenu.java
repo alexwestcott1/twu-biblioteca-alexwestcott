@@ -42,21 +42,18 @@ public class MainMenu {
 
     private void chooseOption(String option){
 
+        //Program reads input from user, if it is valid, display the corresponding option
+        //If input is not valid, display an error message
+
         if(option.matches("[0-3]")){
             performAction(Integer.parseInt(option));
         } else {
             System.out.println("Please select a valid option!");
         }
 
-        //Program reads input from user, if it is valid, display the corresponding option
-        //If input is not valid, display an error message
-
-
-
-
     }
 
-    private void performAction(int chosenAction){
+    public void performAction(int chosenAction){
         if (chosenAction == 0) {
 
             if(library.getCheckedInBooks().size() > 0) {
@@ -72,26 +69,13 @@ public class MainMenu {
             System.exit(0);
 
         } else if (chosenAction == 1) {
-            if(library.getCheckedInBooks().size() > 0) {
-                System.out.println("Please choose a book to check out by entering the corresponding number:");
+            if(library.displayBooksToCheckOut()) {
                 library.displayBooks(library.getCheckedInBooks());
 
-                int chosenBook = -1;
+                String chosenBook = sc.next();
 
-                try {
-                    chosenBook = sc.nextInt();
-
-                    if (chosenBook < library.getCheckedInBooks().size() && chosenBook >= 0) {
-                        if (!library.getCheckedInBooks().get(chosenBook).isCheckedOut()) {
-                            library.checkInOutBook(library.getCheckedInBooks(), library.getCheckedOutBooks(), library.getCheckedInBooks().get(chosenBook), false);
-                        } else {
-                            System.out.println("Sorry, that book is not available");
-                        }
-                    } else {
-                        System.out.println("Please select a valid option!");
-                    }
-                } catch (InputMismatchException e) {
-                    System.out.println("Error: incorrect input type entered");
+                if (verifyListChoice(chosenBook, library.getCheckedInBooks().size())) {
+                    library.checkOutBook(Integer.parseInt(chosenBook));
                 }
             } else {
                 System.out.println("No books available!");
@@ -100,34 +84,33 @@ public class MainMenu {
 
         } else if(chosenAction == 2){
 
-            if(library.getCheckedOutBooks().size() > 0) {
-                System.out.println("Please choose a book to check in by entering the corresponding number:");
+            if(library.displayBooksToCheckIn()) {
                 library.displayBooks(library.getCheckedOutBooks());
 
                 int chosenBook = -1;
 
-                try {
-                    chosenBook = sc.nextInt();
+                String checkInBookChoice = sc.next();
 
-                    if (chosenBook < library.getCheckedOutBooks().size() && chosenBook >= 0) {
-                        if (library.getCheckedOutBooks().get(chosenBook).isCheckedOut()) {
-                            library.checkInOutBook(library.getCheckedInBooks(), library.getCheckedOutBooks(), library.getCheckedOutBooks().get(chosenBook), true);
-                        } else {
-                            System.out.println("Sorry, that book is not available");
-                        }
-                    } else {
-                        System.out.println("Please select a valid option!");
-                    }
-                } catch (InputMismatchException e) {
-                    System.out.println("Error: incorrect input type entered");
+                if (verifyListChoice(checkInBookChoice, library.getCheckedOutBooks().size())) {
+                    library.checkInBook(Integer.parseInt(checkInBookChoice));
                 }
-            } else {
-                System.out.println("No books available!");
             }
 
         }
 
         System.out.println();
+    }
+
+    public boolean verifyListChoice(String option, int listSize){
+
+        if(option.matches("[0-" + (listSize - 1) + "]")){
+            return true;
+        } else {
+            System.out.println("Please select a valid option!");
+        }
+
+        return false;
+
     }
 
 
