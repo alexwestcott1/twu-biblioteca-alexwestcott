@@ -1,6 +1,6 @@
 package com.twu.biblioteca;
 
-import java.util.InputMismatchException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainMenu {
@@ -58,7 +58,7 @@ public class MainMenu {
 
             if(library.getCheckedInBooks().size() > 0) {
                 System.out.println("Available titles: ");
-                library.displayBooks(library.getCheckedInBooks());
+                displayBooks(library.getCheckedInBooks());
             } else {
                 System.out.println("No books available!");
             }
@@ -70,12 +70,22 @@ public class MainMenu {
 
         } else if (chosenAction == 1) {
             if(library.displayBooksToCheckOut()) {
-                library.displayBooks(library.getCheckedInBooks());
 
-                String chosenBook = sc.next();
+                System.out.println("Please choose a book to check out by entering the corresponding number:");
 
-                if (verifyListChoice(chosenBook, library.getCheckedInBooks().size())) {
-                    library.checkOutBook(Integer.parseInt(chosenBook));
+                displayBooks(library.getCheckedInBooks());
+
+                String checkOutBookChoice = sc.next();
+
+                if (verifyListChoice(checkOutBookChoice, library.getCheckedInBooks().size())) {
+
+                    Book book = library.getCheckedInBooks().get(Integer.parseInt(checkOutBookChoice));
+
+                    if(library.checkOutBook(book)){
+                        System.out.println("Successfully checked out book: " + book.getBookTitle());
+                    } else {
+                        System.out.println("Sorry, that book is not available");
+                    }
                 }
             } else {
                 System.out.println("No books available!");
@@ -85,15 +95,25 @@ public class MainMenu {
         } else if(chosenAction == 2){
 
             if(library.displayBooksToCheckIn()) {
-                library.displayBooks(library.getCheckedOutBooks());
 
-                int chosenBook = -1;
+                System.out.println("Please choose a book to check in by entering the corresponding number:");
+                displayBooks(library.getCheckedOutBooks());
+
 
                 String checkInBookChoice = sc.next();
 
                 if (verifyListChoice(checkInBookChoice, library.getCheckedOutBooks().size())) {
-                    library.checkInBook(Integer.parseInt(checkInBookChoice));
+
+                    Book book = library.getCheckedOutBooks().get(Integer.parseInt(checkInBookChoice));
+
+                    if(library.checkInBook(book)){
+                        System.out.println("Thank you for returning the book: " + book.getBookTitle());
+                    } else {
+                        System.out.println("Sorry, that book is not available");
+                    }
                 }
+            } else {
+                System.out.println("No books available!");
             }
 
         }
@@ -110,6 +130,18 @@ public class MainMenu {
         }
 
         return false;
+
+    }
+
+    public void displayBooks(ArrayList<Book> bookList){
+
+        //Display titles from book list
+        int count = 0;
+
+        for (Book book : bookList) {
+            System.out.println(count + ": " + book.getBookTitle() + "\t|\tBy " + book.getBookAuthor() + "\t|\tPublished in " + book.getYearPublished());
+            count++;
+        }
 
     }
 

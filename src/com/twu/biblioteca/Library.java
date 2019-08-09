@@ -1,15 +1,13 @@
 package com.twu.biblioteca;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 public class Library {
 
     //ArrayList that contains all titles
 
-    ArrayList<Book> checkedInBooks = new ArrayList<Book>();
-    ArrayList<Book> checkedOutBooks = new ArrayList<Book>();
+    private ArrayList<Book> checkedInBooks = new ArrayList<Book>();
+    private ArrayList<Book> checkedOutBooks = new ArrayList<Book>();
 
     public void setupLibrary() {
 
@@ -37,26 +35,14 @@ public class Library {
 
 
 
-    public void displayBooks(ArrayList<Book> bookList){
 
-        //Display titles from checked in book list
-        int count = 0;
-
-        for (Book book : bookList) {
-            System.out.println(count + ": " + book.getBookTitle() + "\t|\tBy " + book.getBookAuthor() + "\t|\tPublished in " + book.getYearPublished());
-            count++;
-        }
-
-    }
 
     public boolean displayBooksToCheckIn(){
 
         if(getCheckedOutBooks().size() > 0){
-            System.out.println("Please choose a book to check in by entering the corresponding number:");
             return true;
         }
 
-        System.out.println("No books available!");
         return false;
 
     }
@@ -64,45 +50,39 @@ public class Library {
     public boolean displayBooksToCheckOut(){
 
         if(getCheckedInBooks().size() > 0){
-            System.out.println("Please choose a book to check out by entering the corresponding number:");
             return true;
         }
 
-        System.out.println("No books available!");
         return false;
 
     }
 
 
-    public void checkOutBook(int chosenBook){
-
-        Book book = getCheckedInBooks().get(chosenBook);
-
+    public boolean checkOutBook(Book book){
 
         if (!book.isCheckedOut()) {
             getCheckedInBooks().remove(book);
             getCheckedOutBooks().add(book);
-            System.out.println("Successfully checked out book: " + book.getBookTitle());
             book.setCheckedOut(true);
-        } else {
-            System.out.println("Sorry, that book is not available");
+            return true;
         }
+
+        return false;
 
     }
 
-    public void checkInBook(int chosenBook){
+    public boolean checkInBook(Book book){
 
-        Book book = getCheckedOutBooks().get(chosenBook);
 
-        System.out.println("Book is by " + book.getBookAuthor());
+
         if (book.isCheckedOut()) {
             getCheckedOutBooks().remove(book);
             getCheckedInBooks().add(book);
-            System.out.println("Thank you for returning the book: " + book.getBookTitle());
             book.setCheckedOut(false);
-        } else {
-            System.out.println("Sorry, that book is not available");
+            return true;
         }
+
+        return false;
 
     }
 
