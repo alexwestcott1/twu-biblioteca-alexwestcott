@@ -36,8 +36,6 @@ public class MainMenu {
             System.out.println("2: Check in a book");
             System.out.println("3: Quit application");
 
-
-
     }
 
     private void chooseOption(String option){

@@ -1,27 +1,26 @@
 package com.twu.biblioteca;
 
 
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ExampleTest {
 
-    @Test
-    public void testIfMenuIsEmpty() {
+    private Library lib;
+    private MainMenu menu;
 
-        Library library = new Library();
-        assertFalse(library.displayBooksToCheckIn());
-        assertFalse(library.displayBooksToCheckOut());
+    @Before
+    public void setup(){
 
+        lib = new Library();
+        lib.setupLibrary();
+        menu = new MainMenu(lib);
 
     }
 
     @Test
     public void testMenuOptionChosenLessThanListSize(){
-
-        Library lib = new Library();
-        lib.setupLibrary();
-        MainMenu menu = new MainMenu(lib);
 
         assertTrue(menu.verifyListChoice("0",1));
 
@@ -30,20 +29,12 @@ public class ExampleTest {
     @Test
     public void testMenuOptionChosenLessThanListSize2(){
 
-        Library lib = new Library();
-        lib.setupLibrary();
-        MainMenu menu = new MainMenu(lib);
-
         assertTrue(menu.verifyListChoice("1", 2));
 
     }
 
     @Test
     public void testMenuOptionChosenMoreThanListSize(){
-
-        Library lib = new Library();
-        lib.setupLibrary();
-        MainMenu menu = new MainMenu(lib);
 
         assertFalse(menu.verifyListChoice("5", 3));
 
@@ -52,10 +43,6 @@ public class ExampleTest {
     @Test
     public void testMenuOptionChosenNotANumber(){
 
-        Library lib = new Library();
-        lib.setupLibrary();
-        MainMenu menu = new MainMenu(lib);
-
         assertFalse(menu.verifyListChoice("badinput", 2));
 
     }
@@ -63,11 +50,49 @@ public class ExampleTest {
     @Test
     public void testMenuOptionChosenNegativeNumber(){
 
-        Library lib = new Library();
-        lib.setupLibrary();
-        MainMenu menu = new MainMenu(lib);
-
         assertFalse(menu.verifyListChoice("-2", 5));
+
+    }
+
+    @Test
+    public void testCheckOutBookGivenValidBook(){
+
+        assertTrue(lib.checkOutBook(lib.getCheckedInBooks().get(0)));
+
+    }
+
+    @Test
+    public void testCheckInBookWithNoBooksToCheckIn(){
+
+        assertFalse(lib.checkInBook(new Book("Example book", "Author", 1990)));
+
+    }
+
+    @Test
+    public void testCheckInBookWithValidBook(){
+
+        lib.checkOutBook(lib.getCheckedInBooks().get(2));
+        assertTrue(lib.checkInBook(lib.getCheckedOutBooks().get(0)));
+
+    }
+
+    @Test
+    public void testDisplayBooksToCheckOutWithValidList(){
+
+        assertTrue(lib.displayBooksToCheckOut());
+
+    }
+
+    @Test
+    public void testDisplayBooksToCheckOutWhenAllBooksCheckedOut(){
+
+        //All 3 books get checked out, so there aren't any available
+
+        lib.checkOutBook(lib.getCheckedInBooks().get(0));
+        lib.checkOutBook(lib.getCheckedInBooks().get(0));
+        lib.checkOutBook(lib.getCheckedInBooks().get(0));
+
+        assertFalse(lib.displayBooksToCheckOut());
 
     }
 }
