@@ -5,6 +5,7 @@ public class Book {
     private String bookTitle;
     private String bookAuthor;
     private int yearPublished;
+    private String owner = null;
 
     private boolean checkedOut;
 
@@ -31,6 +32,10 @@ public class Book {
     public boolean isCheckedOut() {
         return checkedOut;
     }
+
+    public String getOwner(){ return owner; }
+
+    public void setOwner(String owner){ this.owner = owner; }
 
     public void setCheckedOut(boolean checkedOut) {
         this.checkedOut = checkedOut;

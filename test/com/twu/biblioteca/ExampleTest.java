@@ -57,7 +57,7 @@ public class ExampleTest {
     @Test
     public void testCheckOutBookGivenValidBook(){
 
-        assertTrue(lib.checkOutBook(lib.getCheckedInBooks().get(0)));
+        assertTrue(lib.checkOutBook(lib.getCheckedInBooks().get(0), "123-4567"));
 
     }
 
@@ -71,7 +71,7 @@ public class ExampleTest {
     @Test
     public void testCheckInBookWithValidBook(){
 
-        lib.checkOutBook(lib.getCheckedInBooks().get(2));
+        lib.checkOutBook(lib.getCheckedInBooks().get(2), "123-4567");
         assertTrue(lib.checkInBook(lib.getCheckedOutBooks().get(0)));
 
     }
@@ -88,9 +88,9 @@ public class ExampleTest {
 
         //All 3 books get checked out, so there aren't any available
 
-        lib.checkOutBook(lib.getCheckedInBooks().get(0));
-        lib.checkOutBook(lib.getCheckedInBooks().get(0));
-        lib.checkOutBook(lib.getCheckedInBooks().get(0));
+        lib.checkOutBook(lib.getCheckedInBooks().get(0), "123-4567");
+        lib.checkOutBook(lib.getCheckedInBooks().get(0), "123-4567");
+        lib.checkOutBook(lib.getCheckedInBooks().get(0), "123-4567");
 
         assertFalse(lib.displayBooksToCheckOut());
 

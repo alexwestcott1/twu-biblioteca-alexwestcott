@@ -34,10 +34,6 @@ public class Library {
 
     }
 
-
-
-
-
     public boolean displayBooksToCheckIn(){
 
         if(getCheckedOutBooks().size() > 0){
@@ -59,12 +55,13 @@ public class Library {
     }
 
 
-    public boolean checkOutBook(Book book){
+    public boolean checkOutBook(Book book, String owner){
 
         if (!book.isCheckedOut()) {
             getCheckedInBooks().remove(book);
             getCheckedOutBooks().add(book);
             book.setCheckedOut(true);
+            book.setOwner(owner);
             return true;
         }
 
@@ -80,10 +77,27 @@ public class Library {
             getCheckedOutBooks().remove(book);
             getCheckedInBooks().add(book);
             book.setCheckedOut(false);
+            book.setOwner(null);
             return true;
         }
 
         return false;
+
+    }
+
+    public boolean validateLogin(String libraryNumber, String password){
+
+        boolean userValid = false;
+
+        for(User user : libraryUsers){
+
+            if(user.getLibraryNumber().equals(libraryNumber)){
+                userValid = user.attemptLogin(libraryNumber, password);
+            }
+
+        }
+
+        return userValid;
 
     }
 

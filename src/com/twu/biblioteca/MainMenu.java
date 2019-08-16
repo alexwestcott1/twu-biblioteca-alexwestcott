@@ -8,6 +8,7 @@ public class MainMenu {
 
     private Library library;
     private Scanner sc = new Scanner(System.in);
+    private String loggedInUser = "";
 
     public MainMenu(Library lib){
 
@@ -79,10 +80,13 @@ public class MainMenu {
 
                     Book book = library.getCheckedInBooks().get(Integer.parseInt(checkOutBookChoice));
 
-                    if(library.checkOutBook(book)){
-                        System.out.println("Successfully checked out book: " + book.getBookTitle());
-                    } else {
-                        System.out.println("Sorry, that book is not available");
+                    if(enterLoginDetails()) {
+                        if (library.checkOutBook(book, loggedInUser)) {
+                            System.out.println("Successfully checked out book: " + book.getBookTitle());
+                            loggedInUser = "";
+                        } else {
+                            System.out.println("Sorry, that book is not available");
+                        }
                     }
                 }
             } else {
@@ -104,10 +108,12 @@ public class MainMenu {
 
                     Book book = library.getCheckedOutBooks().get(Integer.parseInt(checkInBookChoice));
 
-                    if(library.checkInBook(book)){
-                        System.out.println("Thank you for returning the book: " + book.getBookTitle());
-                    } else {
-                        System.out.println("Sorry, that book is not available");
+                    if(enterLoginDetails()) {
+                        if (library.checkInBook(book)) {
+                            System.out.println("Thank you for returning the book: " + book.getBookTitle());
+                        } else {
+                            System.out.println("Sorry, that book is not available");
+                        }
                     }
                 }
             } else {
@@ -137,13 +143,44 @@ public class MainMenu {
         int count = 0;
 
         for (Book book : bookList) {
-            System.out.println(count + ": " + book.getBookTitle() + "\t|\tBy " + book.getBookAuthor() + "\t|\tPublished in " + book.getYearPublished());
+            System.out.print(count + ": " + book.getBookTitle() + "\t|\tBy " + book.getBookAuthor() + "\t|\tPublished in " + book.getYearPublished());
+
+            if(book.isCheckedOut()){
+                System.out.print("\tChecked out by: " + book.getOwner());
+            }
+
+            System.out.println();
+
             count++;
         }
 
     }
 
+    public boolean enterLoginDetails(){
 
+        boolean detailsValid = false;
+        String libraryNumber;
+        String password;
+
+        System.out.println("Enter library number:");
+
+        libraryNumber = sc.next();
+
+        System.out.println("Enter password:");
+
+        password = sc.next();
+
+        detailsValid = library.validateLogin(libraryNumber, password);
+
+        if(!detailsValid){
+            System.out.println("Details not valid!");
+        } else {
+            loggedInUser = libraryNumber;
+        }
+
+        return detailsValid;
+
+    }
 
 
 }
