@@ -12,7 +12,7 @@ public class MainMenu {
     public MainMenu(Library lib){
 
         library = lib;
-        System.out.println("Welcome to Biblioteca, your one-stop-shop for great book titles in Bangalore!");
+        System.out.println("Welcome to Biblioteca, your one-stop-shop for great book titles in Bangalore!!");
 
     }
 
