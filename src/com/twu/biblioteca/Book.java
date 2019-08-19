@@ -17,14 +17,6 @@ public class Book extends Product {
         return title;
     }
 
-    public String getBookAuthor() {
-        return bookAuthor;
-    }
-
-    public int getYearPublished() {
-        return yearPublished;
-    }
-
     @Override
     public String returnInfo(){
         String info = "";

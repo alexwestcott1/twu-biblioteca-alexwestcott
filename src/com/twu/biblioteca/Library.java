@@ -29,15 +29,11 @@ public class Library {
     }
 
     public ArrayList<Product> getCheckedInBooks(){
-
         return checkedInBooks;
-
     }
 
     public ArrayList<Product> getCheckedOutBooks(){
-
         return checkedOutBooks;
-
     }
 
     public ArrayList<Product> getCheckedInFilms() {
@@ -80,7 +76,6 @@ public class Library {
 
     }
 
-
     public boolean checkOutProduct(Product product, String owner, boolean film){
 
         if (!product.isCheckedOut()) {
@@ -105,12 +100,9 @@ public class Library {
 
     public boolean checkInProduct(Product product, boolean film){
 
-
-
         if (product.isCheckedOut()) {
             product.setCheckedOut(false);
             product.setOwner(null);
-
             if(film) {
                 getCheckedOutFilms().remove(product);
                 getCheckedInFilms().add(product);
@@ -129,7 +121,6 @@ public class Library {
     public boolean validateLogin(String libraryNumber, String password){
 
         boolean userValid = false;
-
 
         if(getUserFromID(libraryNumber) != null){
             userValid = getUserFromID(libraryNumber).attemptLogin(libraryNumber,password);
@@ -151,8 +142,4 @@ public class Library {
         return null;
 
     }
-
-
-
-
 }

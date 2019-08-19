@@ -20,24 +20,20 @@ public class MainMenu {
     public void runApplication(){
 
         while(true){
-
             displayMenu();
             String optionSelected = sc.next();
             chooseOption(optionSelected);
-
         }
-
     }
 
     private void displayMenu(){
-
-            System.out.println("Choose an option by entering the corresponding number:");
-            System.out.println("0: List of books");
-            System.out.println("1: List of films");
-            System.out.println("2: Check out a book");
-            System.out.println("3: Check in a book");
-            System.out.println("4: Check out a film");
-            System.out.println("5: Check in a film");
+        System.out.println("Choose an option by entering the corresponding number:");
+        System.out.println("0: List of books");
+        System.out.println("1: List of films");
+        System.out.println("2: Check out a book");
+        System.out.println("3: Check in a book");
+        System.out.println("4: Check out a film");
+        System.out.println("5: Check in a film");
         System.out.println("6: View my info");
         System.out.println("7: Quit application");
 
@@ -254,6 +250,4 @@ public class MainMenu {
         return detailsValid;
 
     }
-
-
 }
