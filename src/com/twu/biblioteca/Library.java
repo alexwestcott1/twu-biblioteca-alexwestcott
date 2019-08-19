@@ -6,8 +6,10 @@ public class Library {
 
     //ArrayList that contains all titles
 
-    private ArrayList<Book> checkedInBooks = new ArrayList<Book>();
-    private ArrayList<Book> checkedOutBooks = new ArrayList<Book>();
+    private ArrayList<Product> checkedInBooks = new ArrayList<Product>();
+    private ArrayList<Product> checkedOutBooks = new ArrayList<Product>();
+    private ArrayList<Product> checkedInFilms = new ArrayList<Product>();
+    private ArrayList<Product> checkedOutFilms = new ArrayList<Product>();
     private ArrayList<User> libraryUsers = new ArrayList<User>();
 
     public void setupLibrary() {
@@ -16,22 +18,34 @@ public class Library {
         checkedInBooks.add(new Book("Harry Potter", "JK Rowling", 2002));
         checkedInBooks.add(new Book("The Hobbit", "JRR Tolkien", 1937));
 
+        checkedInFilms.add(new Film("GoodFellas", "Martin Scorsese", 1990, 9));
+        checkedInFilms.add(new Film("American Beauty", "Sam Mendes", 1999, 8));
+        checkedInFilms.add(new Film("Get Out", "Jordan Peele", 2017, 7));
+
         libraryUsers.add(new User("123-4567", "lemons"));
         libraryUsers.add(new User("555-5555", "apples"));
         libraryUsers.add(new User("999-1234", "oranges"));
 
     }
 
-    public ArrayList<Book> getCheckedInBooks(){
+    public ArrayList<Product> getCheckedInBooks(){
 
         return checkedInBooks;
 
     }
 
-    public ArrayList<Book> getCheckedOutBooks(){
+    public ArrayList<Product> getCheckedOutBooks(){
 
         return checkedOutBooks;
 
+    }
+
+    public ArrayList<Product> getCheckedInFilms() {
+        return checkedInFilms;
+    }
+
+    public ArrayList<Product> getCheckedOutFilms() {
+        return checkedOutFilms;
     }
 
     public boolean displayBooksToCheckIn(){
@@ -55,30 +69,45 @@ public class Library {
     }
 
 
-    public boolean checkOutBook(Book book, String owner){
+    public boolean checkOutProduct(Product product, String owner, boolean film){
 
-        if (!book.isCheckedOut()) {
-            getCheckedInBooks().remove(book);
-            getCheckedOutBooks().add(book);
-            book.setCheckedOut(true);
-            book.setOwner(owner);
-            return true;
+        if (!product.isCheckedOut()) {
+
+            product.setCheckedOut(true);
+            product.setOwner(owner);
+
+            if(film) {
+                getCheckedInFilms().remove(product);
+                getCheckedOutFilms().add(product);
+                return true;
+            } else {
+                getCheckedInBooks().remove(product);
+                getCheckedOutBooks().add(product);
+                return true;
+            }
         }
 
         return false;
 
     }
 
-    public boolean checkInBook(Book book){
+    public boolean checkInProduct(Product product, boolean film){
 
 
 
-        if (book.isCheckedOut()) {
-            getCheckedOutBooks().remove(book);
-            getCheckedInBooks().add(book);
-            book.setCheckedOut(false);
-            book.setOwner(null);
-            return true;
+        if (product.isCheckedOut()) {
+            product.setCheckedOut(false);
+            product.setOwner(null);
+
+            if(film) {
+                getCheckedOutFilms().remove(product);
+                getCheckedInFilms().add(product);
+                return true;
+            } else {
+                getCheckedOutBooks().remove(product);
+                getCheckedInBooks().add(product);
+                return true;
+            }
         }
 
         return false;
@@ -89,6 +118,7 @@ public class Library {
 
         boolean userValid = false;
 
+        /*
         for(User user : libraryUsers){
 
             if(user.getLibraryNumber().equals(libraryNumber)){
@@ -96,8 +126,25 @@ public class Library {
             }
 
         }
+        */
+        if(getUserFromID(libraryNumber) != null){
+            userValid = getUserFromID(libraryNumber).attemptLogin(libraryNumber,password);
+            return userValid;
+        }
 
         return userValid;
+
+    }
+
+    public User getUserFromID(String id){
+
+        for(User user : libraryUsers){
+            if(user.getLibraryNumber().equals(id)){
+                return user;
+            }
+        }
+
+        return null;
 
     }
 

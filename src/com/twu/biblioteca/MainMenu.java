@@ -33,9 +33,12 @@ public class MainMenu {
 
             System.out.println("Choose an option by entering the corresponding number:");
             System.out.println("0: List of books");
-            System.out.println("1: Check out a book");
-            System.out.println("2: Check in a book");
-            System.out.println("3: Quit application");
+            System.out.println("1: List of films");
+            System.out.println("2: Check out a book");
+            System.out.println("3: Check in a book");
+            System.out.println("4: Check out a film");
+            System.out.println("5: Check in a film");
+            System.out.println("6: Quit application");
 
     }
 
@@ -62,12 +65,21 @@ public class MainMenu {
                 System.out.println("No books available!");
             }
 
-        } else if (chosenAction == 3) {
+        } else if(chosenAction == 1){
+
+            if(library.getCheckedInFilms().size() > 0) {
+                System.out.println("Available titles: ");
+                displayBooks(library.getCheckedInFilms());
+            } else {
+                System.out.println("No films available!");
+            }
+
+        } else if (chosenAction == 6) {
 
             System.out.println("Quitting application");
             System.exit(0);
 
-        } else if (chosenAction == 1) {
+        } else if (chosenAction == 2) {
             if(library.displayBooksToCheckOut()) {
 
                 System.out.println("Please choose a book to check out by entering the corresponding number:");
@@ -78,11 +90,11 @@ public class MainMenu {
 
                 if (verifyListChoice(checkOutBookChoice, library.getCheckedInBooks().size())) {
 
-                    Book book = library.getCheckedInBooks().get(Integer.parseInt(checkOutBookChoice));
+                    Product book = library.getCheckedInBooks().get(Integer.parseInt(checkOutBookChoice));
 
                     if(enterLoginDetails()) {
-                        if (library.checkOutBook(book, loggedInUser)) {
-                            System.out.println("Successfully checked out book: " + book.getBookTitle());
+                        if (library.checkOutProduct(book, loggedInUser, false)) {
+                            System.out.println("Successfully checked out book: " + book.getTitle());
                             loggedInUser = "";
                         } else {
                             System.out.println("Sorry, that book is not available");
@@ -94,7 +106,7 @@ public class MainMenu {
             }
 
 
-        } else if(chosenAction == 2){
+        } else if(chosenAction == 3){
 
             if(library.displayBooksToCheckIn()) {
 
@@ -106,11 +118,11 @@ public class MainMenu {
 
                 if (verifyListChoice(checkInBookChoice, library.getCheckedOutBooks().size())) {
 
-                    Book book = library.getCheckedOutBooks().get(Integer.parseInt(checkInBookChoice));
+                    Product book = library.getCheckedOutBooks().get(Integer.parseInt(checkInBookChoice));
 
                     if(enterLoginDetails()) {
-                        if (library.checkInBook(book)) {
-                            System.out.println("Thank you for returning the book: " + book.getBookTitle());
+                        if (library.checkInProduct(book, false)) {
+                            System.out.println("Thank you for returning the book: " + book.getTitle());
                         } else {
                             System.out.println("Sorry, that book is not available");
                         }
@@ -119,6 +131,10 @@ public class MainMenu {
             } else {
                 System.out.println("No books available!");
             }
+
+        } else if(chosenAction == 4){
+
+        } else if(chosenAction == 5){
 
         }
 
@@ -137,17 +153,15 @@ public class MainMenu {
 
     }
 
-    public void displayBooks(ArrayList<Book> bookList){
+    public void displayBooks(ArrayList<Product> bookList){
 
         //Display titles from book list
         int count = 0;
 
-        for (Book book : bookList) {
-            System.out.print(count + ": " + book.getBookTitle() + "\t|\tBy " + book.getBookAuthor() + "\t|\tPublished in " + book.getYearPublished());
+        for (Product book : bookList) {
 
-            if(book.isCheckedOut()){
-                System.out.print("\tChecked out by: " + book.getOwner());
-            }
+            System.out.print(count + ": ");
+            System.out.print(book.returnInfo());
 
             System.out.println();
 

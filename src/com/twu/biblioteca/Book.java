@@ -1,24 +1,20 @@
 package com.twu.biblioteca;
 
-public class Book {
+public class Book extends Product {
 
-    private String bookTitle;
+    private String title;
     private String bookAuthor;
     private int yearPublished;
-    private String owner = null;
 
-    private boolean checkedOut;
+    public Book(String title, String bookAuthor, int yearPublished){
 
-    public Book(String bookTitle, String bookAuthor, int yearPublished){
-
-        this.bookTitle = bookTitle;
+        this.title = title;
         this.bookAuthor = bookAuthor;
         this.yearPublished = yearPublished;
-        checkedOut = false;
     }
 
-    public String getBookTitle() {
-        return bookTitle;
+    public String getTitle(){
+        return title;
     }
 
     public String getBookAuthor() {
@@ -29,15 +25,18 @@ public class Book {
         return yearPublished;
     }
 
-    public boolean isCheckedOut() {
-        return checkedOut;
+    @Override
+    public String returnInfo(){
+        String info = "";
+
+        info += title + "\t|\tBy " + bookAuthor + "\t|\tPublished in " + yearPublished;
+
+        if(isCheckedOut()){
+            info += "\t|\tChecked out by: " + getOwner();
+        }
+
+        return info;
     }
 
-    public String getOwner(){ return owner; }
 
-    public void setOwner(String owner){ this.owner = owner; }
-
-    public void setCheckedOut(boolean checkedOut) {
-        this.checkedOut = checkedOut;
-    }
 }

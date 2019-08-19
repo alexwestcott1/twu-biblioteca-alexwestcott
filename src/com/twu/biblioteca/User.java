@@ -6,13 +6,13 @@ public class User {
 
     private String libraryNumber;
     private String password;
-    private ArrayList<Book> userBooks;
+    private ArrayList<Product> userProducts;
 
-    public User(String libraryNumber, String password){
+    public User(String libraryNumber, String password) {
 
         this.libraryNumber = libraryNumber;
         this.password = password;
-        userBooks = new ArrayList();
+        userProducts = new ArrayList();
 
     }
 
@@ -25,16 +25,10 @@ public class User {
     }
 
 
-    public boolean attemptLogin(String libraryNumberAttempt, String passwordAttempt){
-
-        if(getLibraryNumber().equals(libraryNumberAttempt) && getPassword().equals(passwordAttempt)){
-
+    public boolean attemptLogin(String libraryNumberAttempt, String passwordAttempt) {
+        if (getLibraryNumber().equals(libraryNumberAttempt) && getPassword().equals(passwordAttempt)) {
             return true;
-
         }
-
         return false;
-
     }
-
 }
