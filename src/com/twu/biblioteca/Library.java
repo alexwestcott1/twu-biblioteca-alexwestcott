@@ -22,9 +22,9 @@ public class Library {
         checkedInFilms.add(new Film("American Beauty", "Sam Mendes", 1999, 8));
         checkedInFilms.add(new Film("Get Out", "Jordan Peele", 2017, 7));
 
-        libraryUsers.add(new User("123-4567", "lemons"));
-        libraryUsers.add(new User("555-5555", "apples"));
-        libraryUsers.add(new User("999-1234", "oranges"));
+        libraryUsers.add(new User("123-4567", "lemons", "Alice", "alice@gmail.com", "12345"));
+        libraryUsers.add(new User("555-5555", "apples", "Bob", "bob@gmail.com", "12345"));
+        libraryUsers.add(new User("999-1234", "oranges", "Clive", "clive@gmail.com", "12345"));
 
     }
 

@@ -38,7 +38,8 @@ public class MainMenu {
             System.out.println("3: Check in a book");
             System.out.println("4: Check out a film");
             System.out.println("5: Check in a film");
-            System.out.println("6: Quit application");
+        System.out.println("6: View my info");
+        System.out.println("7: Quit application");
 
     }
 
@@ -47,7 +48,7 @@ public class MainMenu {
         //Program reads input from user, if it is valid, display the corresponding option
         //If input is not valid, display an error message
 
-        if(option.matches("[0-6]")){
+        if (option.matches("[0-7]")) {
             performAction(Integer.parseInt(option));
         } else {
             System.out.println("Please select a valid option!");
@@ -55,7 +56,7 @@ public class MainMenu {
 
     }
 
-    public void performAction(int chosenAction){
+    private void performAction(int chosenAction) {
         if (chosenAction == 0) {
 
             if(library.getCheckedInBooks().size() > 0) {
@@ -74,11 +75,6 @@ public class MainMenu {
                 System.out.println("No films available!");
             }
 
-        } else if (chosenAction == 6) {
-
-            System.out.println("Quitting application");
-            System.exit(0);
-
         } else if (chosenAction == 2) {
 
             chooseProductToCheckOut(false);
@@ -94,6 +90,18 @@ public class MainMenu {
         } else if(chosenAction == 5){
 
             chooseProductToCheckIn(true);
+        } else if (chosenAction == 6) {
+
+            if (enterLoginDetails()) {
+                System.out.println(displayUserInfo(loggedInUser));
+                loggedInUser = "";
+            }
+
+        } else if (chosenAction == 7) {
+
+            System.out.println("Quitting application");
+            System.exit(0);
+
         }
 
         System.out.println();
@@ -108,6 +116,12 @@ public class MainMenu {
         }
 
         return false;
+
+    }
+
+    private String displayUserInfo(String libraryID) {
+
+        return library.getUserFromID(libraryID).returnInfo();
 
     }
 
@@ -198,7 +212,7 @@ public class MainMenu {
 
     }
 
-    public void displayProducts(ArrayList<Product> productList){
+    private void displayProducts(ArrayList<Product> productList) {
 
         //Display titles from book list
         int count = 0;
@@ -215,9 +229,9 @@ public class MainMenu {
 
     }
 
-    public boolean enterLoginDetails(){
+    private boolean enterLoginDetails() {
 
-        boolean detailsValid = false;
+        boolean detailsValid;
         String libraryNumber;
         String password;
 
