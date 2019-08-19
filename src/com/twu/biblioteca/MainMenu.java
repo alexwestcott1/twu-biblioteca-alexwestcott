@@ -47,7 +47,7 @@ public class MainMenu {
         //Program reads input from user, if it is valid, display the corresponding option
         //If input is not valid, display an error message
 
-        if(option.matches("[0-3]")){
+        if(option.matches("[0-6]")){
             performAction(Integer.parseInt(option));
         } else {
             System.out.println("Please select a valid option!");
@@ -60,7 +60,7 @@ public class MainMenu {
 
             if(library.getCheckedInBooks().size() > 0) {
                 System.out.println("Available titles: ");
-                displayBooks(library.getCheckedInBooks());
+                displayProducts(library.getCheckedInBooks());
             } else {
                 System.out.println("No books available!");
             }
@@ -69,7 +69,7 @@ public class MainMenu {
 
             if(library.getCheckedInFilms().size() > 0) {
                 System.out.println("Available titles: ");
-                displayBooks(library.getCheckedInFilms());
+                displayProducts(library.getCheckedInFilms());
             } else {
                 System.out.println("No films available!");
             }
@@ -80,62 +80,20 @@ public class MainMenu {
             System.exit(0);
 
         } else if (chosenAction == 2) {
-            if(library.displayBooksToCheckOut()) {
 
-                System.out.println("Please choose a book to check out by entering the corresponding number:");
-
-                displayBooks(library.getCheckedInBooks());
-
-                String checkOutBookChoice = sc.next();
-
-                if (verifyListChoice(checkOutBookChoice, library.getCheckedInBooks().size())) {
-
-                    Product book = library.getCheckedInBooks().get(Integer.parseInt(checkOutBookChoice));
-
-                    if(enterLoginDetails()) {
-                        if (library.checkOutProduct(book, loggedInUser, false)) {
-                            System.out.println("Successfully checked out book: " + book.getTitle());
-                            loggedInUser = "";
-                        } else {
-                            System.out.println("Sorry, that book is not available");
-                        }
-                    }
-                }
-            } else {
-                System.out.println("No books available!");
-            }
-
+            chooseProductToCheckOut(false);
 
         } else if(chosenAction == 3){
 
-            if(library.displayBooksToCheckIn()) {
-
-                System.out.println("Please choose a book to check in by entering the corresponding number:");
-                displayBooks(library.getCheckedOutBooks());
-
-
-                String checkInBookChoice = sc.next();
-
-                if (verifyListChoice(checkInBookChoice, library.getCheckedOutBooks().size())) {
-
-                    Product book = library.getCheckedOutBooks().get(Integer.parseInt(checkInBookChoice));
-
-                    if(enterLoginDetails()) {
-                        if (library.checkInProduct(book, false)) {
-                            System.out.println("Thank you for returning the book: " + book.getTitle());
-                        } else {
-                            System.out.println("Sorry, that book is not available");
-                        }
-                    }
-                }
-            } else {
-                System.out.println("No books available!");
-            }
+            chooseProductToCheckIn(false);
 
         } else if(chosenAction == 4){
 
+            chooseProductToCheckOut(true);
+
         } else if(chosenAction == 5){
 
+            chooseProductToCheckIn(true);
         }
 
         System.out.println();
@@ -153,15 +111,102 @@ public class MainMenu {
 
     }
 
-    public void displayBooks(ArrayList<Product> bookList){
+    private void chooseProductToCheckIn(boolean film){
+
+        int size = 0;
+
+        if(library.displayProductsToCheckIn(film)) {
+
+            System.out.println("Please choose a product to check in by entering the corresponding number:");
+
+            if(film) {
+                displayProducts(library.getCheckedOutFilms());
+                size = library.getCheckedOutFilms().size();
+            } else {
+                displayProducts(library.getCheckedOutBooks());
+                size = library.getCheckedOutBooks().size();
+            }
+
+
+            String checkInProductChoice = sc.next();
+
+            if (verifyListChoice(checkInProductChoice, size)) {
+
+                Product product;
+
+                if(film) {
+                    product = library.getCheckedOutFilms().get(Integer.parseInt(checkInProductChoice));
+                } else {
+                    product = library.getCheckedOutBooks().get(Integer.parseInt(checkInProductChoice));
+                }
+
+                if(enterLoginDetails()) {
+                    if (library.checkInProduct(product, film)) {
+                        System.out.println("Thank you for returning: " + product.getTitle());
+                    } else {
+                        System.out.println("Sorry, that is not available");
+                    }
+                }
+            }
+        } else {
+            System.out.println("No titles available!");
+        }
+
+    }
+
+    private void chooseProductToCheckOut(boolean film){
+
+        int size = 0;
+
+        if(library.displayProductsToCheckOut(film)) {
+
+            System.out.println("Please choose a product to check out by entering the corresponding number:");
+
+            if(film) {
+                displayProducts(library.getCheckedInFilms());
+                size = library.getCheckedInFilms().size();
+            } else {
+                displayProducts(library.getCheckedInBooks());
+                size = library.getCheckedInBooks().size();
+            }
+
+
+            String checkOutProductChoice = sc.next();
+
+            if (verifyListChoice(checkOutProductChoice, size)) {
+
+                Product product;
+
+                if(film) {
+                    product = library.getCheckedInFilms().get(Integer.parseInt(checkOutProductChoice));
+                } else {
+                    product = library.getCheckedInBooks().get(Integer.parseInt(checkOutProductChoice));
+                }
+
+                if(enterLoginDetails()) {
+                    if (library.checkOutProduct(product, loggedInUser, film)) {
+                        System.out.println("Successfully checked out: " + product.getTitle());
+                        loggedInUser = "";
+                    } else {
+                        System.out.println("Sorry, that is not available");
+                    }
+                }
+            }
+        } else {
+            System.out.println("No titles available!");
+        }
+
+    }
+
+    public void displayProducts(ArrayList<Product> productList){
 
         //Display titles from book list
         int count = 0;
 
-        for (Product book : bookList) {
+        for (Product product : productList) {
 
             System.out.print(count + ": ");
-            System.out.print(book.returnInfo());
+            System.out.print(product.returnInfo());
 
             System.out.println();
 

@@ -48,20 +48,32 @@ public class Library {
         return checkedOutFilms;
     }
 
-    public boolean displayBooksToCheckIn(){
+    public boolean displayProductsToCheckIn(boolean film){
 
-        if(getCheckedOutBooks().size() > 0){
-            return true;
+        if(film) {
+            if (getCheckedOutFilms().size() > 0) {
+                return true;
+            }
+        } else {
+            if (getCheckedOutBooks().size() > 0) {
+                return true;
+            }
         }
 
         return false;
 
     }
 
-    public boolean displayBooksToCheckOut(){
+    public boolean displayProductsToCheckOut(boolean film){
 
-        if(getCheckedInBooks().size() > 0){
-            return true;
+        if(film) {
+            if (getCheckedInFilms().size() > 0) {
+                return true;
+            }
+        } else {
+            if (getCheckedInBooks().size() > 0) {
+                return true;
+            }
         }
 
         return false;
@@ -118,15 +130,7 @@ public class Library {
 
         boolean userValid = false;
 
-        /*
-        for(User user : libraryUsers){
 
-            if(user.getLibraryNumber().equals(libraryNumber)){
-                userValid = user.attemptLogin(libraryNumber, password);
-            }
-
-        }
-        */
         if(getUserFromID(libraryNumber) != null){
             userValid = getUserFromID(libraryNumber).attemptLogin(libraryNumber,password);
             return userValid;

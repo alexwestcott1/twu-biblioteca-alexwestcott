@@ -79,7 +79,7 @@ public class ExampleTest {
     @Test
     public void testDisplayBooksToCheckOutWithValidList(){
 
-        assertTrue(lib.displayBooksToCheckOut());
+        assertTrue(lib.displayProductsToCheckOut(false));
 
     }
 
@@ -92,7 +92,23 @@ public class ExampleTest {
         lib.checkOutProduct(lib.getCheckedInBooks().get(0), "123-4567", false);
         lib.checkOutProduct(lib.getCheckedInBooks().get(0), "123-4567", false);
 
-        assertFalse(lib.displayBooksToCheckOut());
+        assertFalse(lib.displayProductsToCheckOut(false));
+
+    }
+
+    @Test
+    public void testCheckingInFilm(){
+
+        lib.checkOutProduct(lib.getCheckedInFilms().get(0), "123-4567", true);
+
+        assertTrue(lib.checkInProduct(lib.getCheckedOutFilms().get(0), true));
+
+    }
+
+    @Test
+    public void testDisplayFilmsToCheckInWhenEmpty(){
+
+        assertFalse(lib.displayProductsToCheckIn(true));
 
     }
 }
